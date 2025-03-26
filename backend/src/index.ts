@@ -1,7 +1,10 @@
 import express, { Request, Response } from 'express';
+import { createDatabase } from './database';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const DB = createDatabase();
 
 app.use(express.json());
 
