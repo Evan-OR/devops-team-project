@@ -13,7 +13,7 @@ const PostComponent: React.FC<Props> = ({ onTweetPosted }) => {
     if (!content.trim()) return;
 
     try {
-      const response = await fetch('http://localhost:3002/api/tweets', {
+      const response = await fetch('/api/tweets', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

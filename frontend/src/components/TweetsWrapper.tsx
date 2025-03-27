@@ -17,7 +17,7 @@ const TweetsWrapper = () => {
   const fetchTweets = async () => {
     console.log('Fetching tweets...');
     try {
-      const res = await fetch('http://localhost:3002/api/tweets');
+      const res = await fetch('/api/tweets');
       const data = await res.json();
       console.log('Fetched tweets:', data);
       setTweets(data);
