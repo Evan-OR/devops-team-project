@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { createDatabase, insertTweet, getAllTweets} from './database';
 
 const app = express();
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3000;
 
 const DB = createDatabase();
 
