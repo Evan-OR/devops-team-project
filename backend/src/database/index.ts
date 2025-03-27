@@ -26,6 +26,11 @@ const createTables = (db: Database) => {
   `);
 
   db.run(`
+    INSERT OR IGNORE INTO users (id, username, email, password_hash)
+    VALUES (1, 'TestUser', 'test@example.com', 'hashedpassword')
+  `);
+
+  db.run(`
     CREATE TABLE IF NOT EXISTS tweets (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       creator_id INTEGER NOT NULL,
@@ -38,4 +43,37 @@ const createTables = (db: Database) => {
 
 // we can add the database crud logic into this file to help organise it
 
-export { createDatabase };
+const insertTweet = (db: Database, creatorId: number, content: string): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      `INSERT INTO tweets (creator_id, content) VALUES (?, ?)`,
+      [creatorId, content],
+      function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this.lastID); // Return ID of inserted tweet
+        }
+      }
+    );
+  });
+};
+
+const getAllTweets = (db: Database): Promise<any[]> => {
+  return new Promise((resolve, reject) => {
+    db.all(
+      `SELECT tweets.*, users.username FROM tweets JOIN users ON tweets.creator_id = users.id ORDER BY created_at DESC`,
+      [],
+      (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      }
+    );
+  });
+};
+
+
+export { createDatabase, insertTweet, getAllTweets };
