@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Input, Typography, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { login, register } from '../utils/requests';
 import { useNavigate } from 'react-router-dom';
 
