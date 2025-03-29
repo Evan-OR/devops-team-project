@@ -1,8 +1,7 @@
 import { Database } from 'sqlite';
 import { open } from 'sqlite';
 import sqlite3 from 'sqlite3';
-
-type SQLDatabase = Database<sqlite3.Database, sqlite3.Statement>;
+import { SQLDatabase, UserData } from '../types';
 
 const createDatabase = async () => {
   const DB = await open({
@@ -67,4 +66,16 @@ const getAllTweets = async (db: SQLDatabase) => {
   );
 };
 
-export { createDatabase, insertTweet, getAllTweets };
+const insertNewUser = async (db: SQLDatabase, username: string, email: string, hashedPassword: string) => {
+  return await db.run(`INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)`, [
+    username,
+    email,
+    hashedPassword,
+  ]);
+};
+
+const getUserByUsername = async (db: SQLDatabase, username: string): Promise<UserData> => {
+  return (await db.get(`SELECT * FROM users WHERE username = ?`, [username])) as UserData;
+};
+
+export { createDatabase, insertTweet, getAllTweets, insertNewUser, getUserByUsername };
