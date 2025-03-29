@@ -50,10 +50,6 @@ const LoginRegister = () => {
         }),
   };
 
-  useEffect(() => {
-    console.log(inputData);
-  }, [inputData]);
-
   return (
     <Box display={'flex'}>
       <Divider flexItem orientation="vertical" />
