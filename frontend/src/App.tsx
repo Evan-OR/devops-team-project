@@ -1,15 +1,17 @@
-import { Box } from '@mui/material';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import DefaultLayout from './components/DefaultLayout';
+import LoginRegister from './components/LoginRegister';
 import TweetsWrapper from './components/TweetsWrapper';
-import Nav from './components/Nav';
-import RightSideBar from './components/RightSideBar';
 
 function App() {
   return (
-    <Box display={'flex'} justifyContent={'center'} gap={1}>
-      <Nav />
-      <TweetsWrapper />
-      <RightSideBar />
-    </Box>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<DefaultLayout mainComponent={<TweetsWrapper />} />} />
+        <Route path="/auth" element={<DefaultLayout mainComponent={<LoginRegister />} />} />
+        <Route path="*" element={<>PAGE NOT FOUND!</>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

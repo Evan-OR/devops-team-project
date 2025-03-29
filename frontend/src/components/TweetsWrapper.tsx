@@ -1,4 +1,4 @@
-import { Box, Divider, Paper, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Tweet from './Tweet';
 import PostComponent from './PostComponent';
@@ -42,33 +42,31 @@ const TweetsWrapper = () => {
   };
 
   return (
-    <Paper sx={{ width: '600px' }}>
-      <Box display={'flex'}>
-        <Divider flexItem orientation="vertical" />
-        <Box width={'100%'}>
-          <Box>
-            <Typography variant="h6" p={1}>
-              Home
-            </Typography>
-            <Divider />
-          </Box>
-
-          {/* refresh callback to PostComponent */}
-          <PostComponent onTweetPosted={fetchTweets} />
-
-          {/* Tweets rendered Dynamically */}
-          {tweets.map((tweet) => (
-            <Tweet
-              key={tweet.id}
-              username={tweet.username}
-              content={tweet.content}
-              timestamp={formatRelativeTime(tweet.created_at)}
-            />
-          ))}
+    <Box display={'flex'}>
+      <Divider flexItem orientation="vertical" />
+      <Box width={'100%'}>
+        <Box>
+          <Typography variant="h6" p={1}>
+            Home
+          </Typography>
+          <Divider />
         </Box>
-        <Divider flexItem orientation="vertical" />
+
+        {/* refresh callback to PostComponent */}
+        <PostComponent onTweetPosted={fetchTweets} />
+
+        {/* Tweets rendered Dynamically */}
+        {tweets.map((tweet) => (
+          <Tweet
+            key={tweet.id}
+            username={tweet.username}
+            content={tweet.content}
+            timestamp={formatRelativeTime(tweet.created_at)}
+          />
+        ))}
       </Box>
-    </Paper>
+      <Divider flexItem orientation="vertical" />
+    </Box>
   );
 };
 

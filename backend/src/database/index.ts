@@ -67,7 +67,7 @@ const getAllTweets = async (db: SQLDatabase) => {
 };
 
 const insertNewUser = async (db: SQLDatabase, username: string, email: string, hashedPassword: string) => {
-  return await db.all(`INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)`, [
+  return await db.run(`INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)`, [
     username,
     email,
     hashedPassword,

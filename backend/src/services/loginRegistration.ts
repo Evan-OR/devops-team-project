@@ -9,7 +9,8 @@ const SECRET = process.env.SECRET as string;
 export const registerUser = async (db: SQLDatabase, username: string, email: string, password: string) => {
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-  await insertNewUser(db, username, email, hashedPassword);
+  const { lastID } = await insertNewUser(db, username, email, hashedPassword);
+  return lastID;
 };
 
 export const getUserAuthTokenAndData = async (db: SQLDatabase, username: string, password: string) => {
@@ -21,7 +22,9 @@ export const getUserAuthTokenAndData = async (db: SQLDatabase, username: string,
     throw new Error('Invlid login creds');
   }
 
-  const authToken = jwt.sign({ id, email, username }, SECRET);
+  return { id, email, username };
+};
 
-  return { id, email, username, authToken };
+export const generateAuthToken = (userId: number, username: string, email: string) => {
+  return jwt.sign({ userId, username, email }, SECRET);
 };

@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import { createDatabase, insertTweet, getAllTweets } from './database';
-import { getUserAuthTokenAndData, registerUser } from './services/loginRegistration';
+import { generateAuthToken, getUserAuthTokenAndData, registerUser } from './services/loginRegistration';
 
 (async () => {
   const app = express();
@@ -42,7 +42,7 @@ import { getUserAuthTokenAndData, registerUser } from './services/loginRegistrat
     }
   });
 
-  app.get('/api/register', async (req: Request, res: Response) => {
+  app.post('/api/register', async (req: Request, res: Response) => {
     try {
       const username = req.body.username;
       const email = req.body.email;
@@ -53,26 +53,40 @@ import { getUserAuthTokenAndData, registerUser } from './services/loginRegistrat
         return;
       }
 
-      await registerUser(DB, username, email, password);
+      const userId = (await registerUser(DB, username, email, password)) as number;
 
-      res.status(201).send();
+      const authToken = generateAuthToken(userId, username, email);
+
+      res.cookie('auth_token', authToken, {
+        httpOnly: true,
+      });
+      res.cookie(
+        'user_data',
+        { userId, username, email },
+        {
+          httpOnly: true,
+        }
+      );
+
+      res.status(201).json({ message: 'Registration successful' });
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to register user' });
     }
   });
 
-  app.get('/api/login', async (req: Request, res: Response) => {
+  app.post('/api/login', async (req: Request, res: Response) => {
     try {
-      const username = req.body.username;
-      const password = req.body.password;
+      const usernameParam = req.body.username;
+      const passwordParam = req.body.password;
 
-      if (!username || !password) {
-        res.status(400).send({ message: 'Missing value', username, password });
+      if (!usernameParam || !passwordParam) {
+        res.status(400).send({ message: 'Missing value', usernameParam, passwordParam });
         return;
       }
 
-      const { id, email, authToken } = await getUserAuthTokenAndData(DB, username, password);
+      const { id, username, email } = await getUserAuthTokenAndData(DB, usernameParam, passwordParam);
+      const authToken = generateAuthToken(id, username, email);
 
       res.cookie('auth_token', authToken, {
         httpOnly: true,
