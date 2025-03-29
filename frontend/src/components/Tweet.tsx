@@ -1,6 +1,6 @@
 import { Avatar, Box, Divider, IconButton, Typography } from '@mui/material';
 import { red, pink, purple, orange, yellow, green, lightBlue, lightGreen } from '@mui/material/colors';
-import { Favorite, Edit } from '@mui/icons-material';
+import { FavoriteBorder, Edit } from '@mui/icons-material';
 
 type TweetProps = {
   username: string;
@@ -35,10 +35,10 @@ function Tweet({ username, content, timestamp }: TweetProps) {
 
             <Box display={'flex'} justifyContent={'space-between'}>
               <IconButton aria-label="Like">
-                <Favorite />
+                <FavoriteBorder />
               </IconButton>
 
-              <IconButton aria-label="Like">
+              <IconButton aria-label="Edit">
                 <Edit />
               </IconButton>
             </Box>
