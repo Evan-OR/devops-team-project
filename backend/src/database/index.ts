@@ -1,4 +1,3 @@
-import { Database } from 'sqlite';
 import { open } from 'sqlite';
 import sqlite3 from 'sqlite3';
 import { SQLDatabase, UserData } from '../types';
