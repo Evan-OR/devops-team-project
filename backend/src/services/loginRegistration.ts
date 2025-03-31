@@ -19,7 +19,7 @@ export const getUserAuthTokenAndData = async (db: SQLDatabase, username: string,
   const isValid = await bcrypt.compare(password, password_hash);
 
   if (!isValid) {
-    throw new Error('Invlid login creds');
+    throw new Error('Invalid login creds');
   }
 
   return { id, email, username };
