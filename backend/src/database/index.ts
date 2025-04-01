@@ -1,20 +1,13 @@
-import { Database } from 'sqlite';
 import { open } from 'sqlite';
 import sqlite3 from 'sqlite3';
 import { SQLDatabase, UserData } from '../types';
 
-const createDatabase = async () => {
-  const DB = await open({
-    filename: './db.sqlite',
+const createDatabase = async (testMode = false) => {
+  const db = await open({
+    filename: testMode ? ':memory:' : './db.sqlite',
     driver: sqlite3.Database,
   });
 
-  await createTables(DB);
-
-  return DB;
-};
-
-const createTables = async (db: SQLDatabase) => {
   await db.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,11 +27,15 @@ const createTables = async (db: SQLDatabase) => {
     )
   `);
 
-  // can change this to use env type in the future
-  await createTestData(db);
+  // since createDevData() is used for having data during development, don't create if in test mode.
+  if (!testMode) {
+    await createDevData(db);
+  }
+
+  return db;
 };
 
-const createTestData = async (db: SQLDatabase) => {
+const createDevData = async (db: SQLDatabase) => {
   await db.exec(`
     INSERT OR IGNORE INTO users (id, username, email, password_hash)
     VALUES (1, 'TestUser', 'test@example.com', 'hashedpassword')
