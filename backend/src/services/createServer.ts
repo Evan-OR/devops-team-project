@@ -3,11 +3,16 @@ import express, { Request, Response } from 'express';
 import { insertTweet, getAllTweets } from '../database';
 import { generateAuthToken, getUserAuthTokenAndData, registerUser } from './loginRegistration';
 import { SQLDatabase } from '../types';
+import path from 'path';
 
 const createServer = async (db: SQLDatabase) => {
   const app = express();
 
   app.use(express.json());
+
+  const distPath = path.join(__dirname, '../dist');
+  app.use(express.static(path.join(__dirname, distPath)));
+  app.use(express.static(distPath, { extensions: ['js', 'css'] }));
 
   app.get('/api', (req: Request, res: Response) => {
     res.send({ message: 'Working RN' });
@@ -106,6 +111,10 @@ const createServer = async (db: SQLDatabase) => {
         res.status(500).json({ error: 'Failed to Login' });
       }
     }
+  });
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
   });
 
   return app;

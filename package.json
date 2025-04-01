@@ -1,0 +1,22 @@
+{
+  "name": "devops-team-project",
+  "version": "1.0.0",
+  "description": "Twitter clone",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd backend && npm run build && cd .. && cd frontend && npm run build",
+    "start": "node backend/server/src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Evan-OR/devops-team-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Evan-OR/devops-team-project/issues"
+  },
+  "homepage": "https://github.com/Evan-OR/devops-team-project#readme"
+}
