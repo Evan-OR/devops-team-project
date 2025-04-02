@@ -1,9 +1,6 @@
 name: Running CI tests, etc.
 
 on:
-  push:
-    branches:
-      - '**'
   pull_request:
   workflow_dispatch:
 
