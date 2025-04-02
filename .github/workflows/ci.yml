@@ -1,0 +1,42 @@
+name: Running CI tests, etc.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests-etc:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      SECRET: ${{ secrets.SECRET }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+
+      - name: Setting ENV vars
+        run: |
+          cd backend
+          npm install
+
+      - name: npm install
+        run: |
+          cd backend
+          npm install
+
+      - name: Run tests
+        run: |
+          cd backend
+          npm run test
+
+      - name: Security audit on packges
+        run: |
+          cd backend
+          npm audit
