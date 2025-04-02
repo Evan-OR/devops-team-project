@@ -47,9 +47,9 @@ const createDevData = async (db: SQLDatabase) => {
   if (tweetsExist.count === 0) {
     await db.exec(` 
     INSERT INTO tweets (creator_id, content, created_at, likes) VALUES
-    (1, 'Cool test tweet ONE', '2025-03-28 08:30:00'),
-    (1, 'Another test tweet', '2025-03-28 09:15:00'),
-    (1, 'Tweet THREE', '2025-03-28 09:15:00')
+    (1, 'Cool test tweet ONE', '2025-03-28 08:30:00', 0),
+    (1, 'Another test tweet', '2025-03-28 09:15:00', 0),
+    (1, 'Tweet THREE', '2025-03-28 09:15:00', 0)
   `);
   }
 };
