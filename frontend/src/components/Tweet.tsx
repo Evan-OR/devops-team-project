@@ -1,45 +1,83 @@
-import { Avatar, Box, Divider, IconButton, Typography } from '@mui/material';
-import { red, pink, purple, orange, yellow, green, lightBlue, lightGreen } from '@mui/material/colors';
-import { FavoriteBorder, Edit } from '@mui/icons-material';
+import { Avatar, Box, Divider, IconButton, Typography } from "@mui/material";
+import {
+  red,
+  pink,
+  purple,
+  orange,
+  yellow,
+  green,
+  lightBlue,
+  lightGreen,
+} from "@mui/material/colors";
+import { FavoriteBorder, Edit, Delete } from "@mui/icons-material";
 
 type TweetProps = {
   username: string;
   content: string;
   timestamp: string;
+  onDelete: () => void;
 };
 
-function Tweet({ username, content, timestamp }: TweetProps) {
+function Tweet({ username, content, timestamp, onDelete }: TweetProps) {
   const randomIconColor = () => {
-    const colors = [red, pink, purple, orange, yellow, green, lightBlue, lightGreen];
+    const colors = [
+      red,
+      pink,
+      purple,
+      orange,
+      yellow,
+      green,
+      lightBlue,
+      lightGreen,
+    ];
     const randomIndex = Math.floor(Math.random() * colors.length);
     return colors[randomIndex][500];
   };
 
   return (
     <Box>
-      <Box display={'flex'} gap={1} p={1}>
+      <Box display={"flex"} gap={1} p={1}>
         <Box>
-          <Avatar sx={{ backgroundColor: randomIconColor() }}>{username.charAt(0)}</Avatar>
+          <Avatar sx={{ backgroundColor: randomIconColor() }}>
+            {username.charAt(0)}
+          </Avatar>
         </Box>
 
-        <Box width={'100%'}>
-          <Box display={'flex'} flexDirection={'column'}>
+        <Box width={"100%"}>
+          <Box display={"flex"} flexDirection={"column"}>
             <Box>
-              <Typography variant="subtitle1" fontWeight={'bold'} display={'inline'}>
+              <Typography
+                variant="subtitle1"
+                fontWeight={"bold"}
+                display={"inline"}
+              >
                 {username}
               </Typography>
-              <Typography display={'inline'}> · {timestamp}</Typography>
+              <Typography display={"inline"}> · {timestamp}</Typography>
             </Box>
 
-            <Typography width={'100%'}>{content}</Typography>
+            <Typography width={"100%"}>{content}</Typography>
 
-            <Box display={'flex'} justifyContent={'space-between'}>
+            <Box display={"flex"} justifyContent={"space-between"}>
               <IconButton aria-label="Like">
                 <FavoriteBorder />
               </IconButton>
 
               <IconButton aria-label="Edit">
                 <Edit />
+              </IconButton>
+
+              <IconButton
+                aria-label="Delete"
+                onClick={onDelete}
+                sx={{
+                  transition: "color 0.2s ease-in-out",
+                  "&:hover": {
+                    color: "red",
+                  },
+                }}
+              >
+                <Delete />
               </IconButton>
             </Box>
           </Box>
