@@ -12,6 +12,9 @@ jobs:
     permissions:
       contents: read
 
+    env:
+      SECRET: ${{ secrets.SECRET }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -20,8 +23,22 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: npm install, build, and test
+      - name: Setting ENV vars
         run: |
           cd backend
           npm install
+
+      - name: npm install
+        run: |
+          cd backend
+          npm install
+
+      - name: Run tests
+        run: |
+          cd backend
           npm run test
+
+      - name: Security audit on packges
+        run: |
+          cd backend
+          npm audit
