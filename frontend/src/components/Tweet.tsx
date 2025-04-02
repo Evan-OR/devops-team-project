@@ -12,13 +12,24 @@ import {
 import { FavoriteBorder, Edit, Delete } from "@mui/icons-material";
 
 type TweetProps = {
+  id: number;
   username: string;
   content: string;
   timestamp: string;
   onDelete: () => void;
+  likes: number;
+  onLike: (id: number) => void;
 };
 
-function Tweet({ username, content, timestamp, onDelete }: TweetProps) {
+function Tweet({
+  id,
+  username,
+  content,
+  timestamp,
+  onDelete,
+  likes,
+  onLike,
+}: TweetProps) {
   const randomIconColor = () => {
     const colors = [
       red,
@@ -58,10 +69,28 @@ function Tweet({ username, content, timestamp, onDelete }: TweetProps) {
 
             <Typography width={"100%"}>{content}</Typography>
 
-            <Box display={"flex"} justifyContent={"space-between"}>
-              <IconButton aria-label="Like">
-                <FavoriteBorder />
-              </IconButton>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              alignItems="center"
+            >
+              <Box display="flex" alignItems="center" gap={1}>
+                <IconButton
+                  aria-label="Like"
+                  onClick={() => onLike(id)}
+                  sx={{
+                    transition: "color 0.2s ease-in-out",
+                    "&:hover": {
+                      color: "pink",
+                    },
+                  }}
+                >
+                  <FavoriteBorder />
+                </IconButton>
+                <Typography variant="body2">
+                  {likes} {likes === 1 ? "Like" : "Likes"}
+                </Typography>
+              </Box>
 
               <IconButton aria-label="Edit">
                 <Edit />

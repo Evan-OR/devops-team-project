@@ -23,6 +23,7 @@ const createDatabase = async (testMode = false) => {
       creator_id INTEGER NOT NULL,
       content TEXT NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      likes INTEGER DEFAULT 0,
       FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE
     )
   `);
@@ -45,7 +46,7 @@ const createDevData = async (db: SQLDatabase) => {
 
   if (tweetsExist.count === 0) {
     await db.exec(` 
-    INSERT INTO tweets (creator_id, content, created_at) VALUES
+    INSERT INTO tweets (creator_id, content, created_at, likes) VALUES
     (1, 'Cool test tweet ONE', '2025-03-28 08:30:00'),
     (1, 'Another test tweet', '2025-03-28 09:15:00'),
     (1, 'Tweet THREE', '2025-03-28 09:15:00')
@@ -73,6 +74,10 @@ const getAllTweets = async (db: SQLDatabase) => {
 const deleteTweet = async (db: SQLDatabase, tweetId: number): Promise<void> => {
   // Execute the SQL DELETE query to remove the tweet by its id.
   await db.run("DELETE FROM tweets WHERE id = ?", [tweetId]);
+};
+
+const updateLikes = async (db: SQLDatabase, tweetId: number): Promise<void> => {
+  await db.run("UPDATE tweets SET likes = likes + 1 WHERE id = ?", [tweetId]);
 };
 
 const insertNewUser = async (
@@ -103,4 +108,5 @@ export {
   insertNewUser,
   getUserByUsername,
   deleteTweet,
+  updateLikes,
 };

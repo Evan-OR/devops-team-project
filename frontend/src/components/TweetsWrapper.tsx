@@ -8,6 +8,7 @@ interface TweetType {
   username: string;
   content: string;
   created_at: string;
+  likes: number;
 }
 
 const TweetsWrapper = () => {
@@ -47,6 +48,24 @@ const TweetsWrapper = () => {
     }
   };
 
+  const handleLikeTweet = async (id: number) => {
+    console.log("Liking tweet with ID:", id);
+    try {
+      const response = await fetch(`/api/tweets/${id}/like`, { method: "PUT" });
+      if (response.ok) {
+        setTweets((prev) =>
+          prev.map((tweet) =>
+            tweet.id === id ? { ...tweet, likes: tweet.likes + 1 } : tweet
+          )
+        );
+      } else {
+        console.error("Failed to like tweet");
+      }
+    } catch (error) {
+      console.error("Error liking tweet:", error);
+    }
+  };
+
   const formatRelativeTime = (isoDate: string): string => {
     const date = new Date(isoDate);
     const secondsAgo = Math.floor((Date.now() - date.getTime()) / 1000);
@@ -79,6 +98,9 @@ const TweetsWrapper = () => {
             content={tweet.content}
             timestamp={formatRelativeTime(tweet.created_at)}
             onDelete={() => handleDeleteTweet(tweet.id)}
+            likes={tweet.likes}
+            onLike={handleLikeTweet}
+            id={tweet.id}
           />
         ))}
       </Box>

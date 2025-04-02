@@ -1,6 +1,11 @@
 import "dotenv/config";
 import express, { Request, Response } from "express";
-import { insertTweet, getAllTweets, deleteTweet } from "../database";
+import {
+  insertTweet,
+  getAllTweets,
+  deleteTweet,
+  updateLikes,
+} from "../database";
 import {
   generateAuthToken,
   getUserAuthTokenAndData,
@@ -60,6 +65,17 @@ const createServer = async (db: SQLDatabase) => {
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Failed to delete tweet" });
+    }
+  });
+
+  app.put("/api/tweets/:id/like", async (req: Request, res: Response) => {
+    const tweetId = parseInt(req.params.id);
+    try {
+      await updateLikes(db, tweetId);
+      res.sendStatus(200);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Failed to update likes" });
     }
   });
 
