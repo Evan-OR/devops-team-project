@@ -1,0 +1,27 @@
+name: Running CI tests, etc.
+
+on:
+  push:
+    branches:
+      - deployment-setup
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+
+      - name: npm install, build, and test
+        run: |
+          cd backend
+          npm install
+          npm run test
