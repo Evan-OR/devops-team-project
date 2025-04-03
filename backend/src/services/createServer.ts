@@ -13,10 +13,12 @@ import {
 } from "./loginRegistration";
 import { SQLDatabase } from "../types";
 import path from "path";
+import cookieParser from "cookie-parser";
 
 const createServer = async (db: SQLDatabase) => {
   const app = express();
 
+  app.use(cookieParser());
   app.use(express.json());
 
   const distPath = path.join(__dirname, "../dist");
@@ -40,16 +42,32 @@ const createServer = async (db: SQLDatabase) => {
   app.post(
     "/api/tweets",
     async (req: Request, res: Response): Promise<void> => {
-      const { content, creator_id } = req.body;
+      const { content } = req.body;
 
-      if (!content || !creator_id) {
-        res.status(400).json({ error: "Missing content or creator_id" });
+      if (!content) {
+        res.status(400).json({ error: "Missing tweet content" });
         return;
+      }
+
+      let creator_id = 1;
+      let username = "TestUser";
+
+      if (req.cookies && req.cookies.user_data) {
+        try {
+          const userData =
+            typeof req.cookies.user_data === "string"
+              ? JSON.parse(req.cookies.user_data)
+              : req.cookies.user_data;
+          creator_id = userData.id || creator_id;
+          username = userData.username || username;
+        } catch (err) {
+          console.error("Error parsing user_data cookie:", err);
+        }
       }
 
       try {
         const tweetId = await insertTweet(db, creator_id, content);
-        res.status(201).json({ id: tweetId, content, creator_id });
+        res.status(201).json({ id: tweetId, content, creator_id, username });
       } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Failed to post tweet" });
@@ -92,21 +110,16 @@ const createServer = async (db: SQLDatabase) => {
         return;
       }
 
-      const userId = (await registerUser(
-        db,
-        username,
-        email,
-        password
-      )) as number;
+      const id = (await registerUser(db, username, email, password)) as number;
 
-      const authToken = generateAuthToken(userId, username, email);
+      const authToken = generateAuthToken(id, username, email);
 
       res.cookie("auth_token", authToken, {
         httpOnly: true,
       });
       res.cookie(
         "user_data",
-        { userId, username, email },
+        { id, username, email },
         {
           httpOnly: true,
         }
