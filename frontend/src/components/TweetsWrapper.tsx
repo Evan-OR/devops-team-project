@@ -1,7 +1,7 @@
-import { Box, Divider, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import Tweet from "./Tweet";
-import PostComponent from "./PostComponent";
+import { Box, Divider, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import Tweet from './Tweet';
+import PostComponent from './PostComponent';
 
 interface TweetType {
   id: number;
@@ -16,14 +16,14 @@ const TweetsWrapper = () => {
 
   // Fetch tweets from the backend
   const fetchTweets = async () => {
-    console.log("Fetching tweets...");
+    console.log('Fetching tweets...');
     try {
-      const res = await fetch("/api/tweets");
+      const res = await fetch('/api/tweets');
       const data = await res.json();
-      console.log("Fetched tweets:", data);
+      console.log('Fetched tweets:', data);
       setTweets(data);
     } catch (err) {
-      console.error("Failed to fetch tweets:", err);
+      console.error('Failed to fetch tweets:', err);
     }
   };
 
@@ -34,35 +34,29 @@ const TweetsWrapper = () => {
 
   const handleDeleteTweet = async (id: number) => {
     try {
-      const response = await fetch(`/api/tweets/${id}`, { method: "DELETE" });
+      const response = await fetch(`/api/tweets/${id}`, { method: 'DELETE' });
       if (response.ok) {
         // Update state by filtering out the deleted tweet
-        setTweets((prevTweets) =>
-          prevTweets.filter((tweet) => tweet.id !== id)
-        );
+        setTweets((prevTweets) => prevTweets.filter((tweet) => tweet.id !== id));
       } else {
-        console.error("Failed to delete tweet");
+        console.error('Failed to delete tweet');
       }
     } catch (err) {
-      console.error("Error deleting tweet:", err);
+      console.error('Error deleting tweet:', err);
     }
   };
 
   const handleLikeTweet = async (id: number) => {
-    console.log("Liking tweet with ID:", id);
+    console.log('Liking tweet with ID:', id);
     try {
-      const response = await fetch(`/api/tweets/${id}/like`, { method: "PUT" });
+      const response = await fetch(`/api/tweets/${id}/like`, { method: 'PUT' });
       if (response.ok) {
-        setTweets((prev) =>
-          prev.map((tweet) =>
-            tweet.id === id ? { ...tweet, likes: tweet.likes + 1 } : tweet
-          )
-        );
+        setTweets((prev) => prev.map((tweet) => (tweet.id === id ? { ...tweet, likes: tweet.likes + 1 } : tweet)));
       } else {
-        console.error("Failed to like tweet");
+        console.error('Failed to like tweet');
       }
     } catch (error) {
-      console.error("Error liking tweet:", error);
+      console.error('Error liking tweet:', error);
     }
   };
 
@@ -77,9 +71,9 @@ const TweetsWrapper = () => {
   };
 
   return (
-    <Box display={"flex"}>
+    <Box display={'flex'}>
       <Divider flexItem orientation="vertical" />
-      <Box width={"100%"}>
+      <Box width={'100%'}>
         <Box>
           <Typography variant="h6" p={1}>
             Home
