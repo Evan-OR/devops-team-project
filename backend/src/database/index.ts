@@ -1,10 +1,10 @@
-import { open } from "sqlite";
-import sqlite3 from "sqlite3";
-import { SQLDatabase, UserData } from "../types";
+import { open } from 'sqlite';
+import sqlite3 from 'sqlite3';
+import { SQLDatabase, UserData } from '../types';
 
 const createDatabase = async (testMode = false) => {
   const db = await open({
-    filename: testMode ? ":memory:" : "./db.sqlite",
+    filename: testMode ? ':memory:' : './db.sqlite',
     driver: sqlite3.Database,
   });
 
@@ -42,7 +42,7 @@ const createDevData = async (db: SQLDatabase) => {
     VALUES (1, 'TestUser', 'test@example.com', 'hashedpassword')
   `);
 
-  const tweetsExist = await db.get("SELECT COUNT(*) AS count FROM tweets");
+  const tweetsExist = await db.get('SELECT COUNT(*) AS count FROM tweets');
 
   if (tweetsExist.count === 0) {
     await db.exec(` 
@@ -54,15 +54,8 @@ const createDevData = async (db: SQLDatabase) => {
   }
 };
 
-const insertTweet = async (
-  db: SQLDatabase,
-  creatorId: number,
-  content: string
-) => {
-  return await db.get(
-    `INSERT INTO tweets (creator_id, content) VALUES (?, ?)`,
-    [creatorId, content]
-  );
+const insertTweet = async (db: SQLDatabase, creatorId: number, content: string) => {
+  return await db.get(`INSERT INTO tweets (creator_id, content) VALUES (?, ?)`, [creatorId, content]);
 };
 
 const getAllTweets = async (db: SQLDatabase) => {
@@ -73,40 +66,23 @@ const getAllTweets = async (db: SQLDatabase) => {
 
 const deleteTweet = async (db: SQLDatabase, tweetId: number): Promise<void> => {
   // Execute the SQL DELETE query to remove the tweet by its id.
-  await db.run("DELETE FROM tweets WHERE id = ?", [tweetId]);
+  await db.run('DELETE FROM tweets WHERE id = ?', [tweetId]);
 };
 
 const updateLikes = async (db: SQLDatabase, tweetId: number): Promise<void> => {
-  await db.run("UPDATE tweets SET likes = likes + 1 WHERE id = ?", [tweetId]);
+  await db.run('UPDATE tweets SET likes = likes + 1 WHERE id = ?', [tweetId]);
 };
 
-const insertNewUser = async (
-  db: SQLDatabase,
-  username: string,
-  email: string,
-  hashedPassword: string
-) => {
-  return await db.run(
-    `INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)`,
-    [username, email, hashedPassword]
-  );
-};
-
-const getUserByUsername = async (
-  db: SQLDatabase,
-  username: string
-): Promise<UserData> => {
-  return (await db.get(`SELECT * FROM users WHERE username = ?`, [
+const insertNewUser = async (db: SQLDatabase, username: string, email: string, hashedPassword: string) => {
+  return await db.run(`INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)`, [
     username,
-  ])) as UserData;
+    email,
+    hashedPassword,
+  ]);
 };
 
-export {
-  createDatabase,
-  insertTweet,
-  getAllTweets,
-  insertNewUser,
-  getUserByUsername,
-  deleteTweet,
-  updateLikes,
+const getUserByUsername = async (db: SQLDatabase, username: string): Promise<UserData> => {
+  return (await db.get(`SELECT * FROM users WHERE username = ?`, [username])) as UserData;
 };
+
+export { createDatabase, insertTweet, getAllTweets, insertNewUser, getUserByUsername, deleteTweet, updateLikes };
