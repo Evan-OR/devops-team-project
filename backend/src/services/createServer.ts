@@ -110,21 +110,16 @@ const createServer = async (db: SQLDatabase) => {
         return;
       }
 
-      const userId = (await registerUser(
-        db,
-        username,
-        email,
-        password
-      )) as number;
+      const id = (await registerUser(db, username, email, password)) as number;
 
-      const authToken = generateAuthToken(userId, username, email);
+      const authToken = generateAuthToken(id, username, email);
 
       res.cookie("auth_token", authToken, {
         httpOnly: true,
       });
       res.cookie(
         "user_data",
-        { userId, username, email },
+        { id, username, email },
         {
           httpOnly: true,
         }
