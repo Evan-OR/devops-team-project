@@ -1,6 +1,6 @@
 import { Avatar, Box, Divider, IconButton, Typography } from '@mui/material';
 import { red, pink, purple, orange, yellow, green, lightBlue, lightGreen } from '@mui/material/colors';
-import { FavoriteBorder, Edit, Delete } from '@mui/icons-material';
+import { FavoriteBorder, Delete } from '@mui/icons-material';
 
 type TweetProps = {
   id: number;
