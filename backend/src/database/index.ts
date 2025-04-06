@@ -85,4 +85,37 @@ const getUserByUsername = async (db: SQLDatabase, username: string): Promise<Use
   return (await db.get(`SELECT * FROM users WHERE username = ?`, [username])) as UserData;
 };
 
-export { createDatabase, insertTweet, getAllTweets, insertNewUser, getUserByUsername, deleteTweet, updateLikes };
+const resetDB = async (db: SQLDatabase): Promise<void> => {
+  await db.exec(`DROP TABLE tweets; DROP TABLE users;`);
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      password_hash TEXT NOT NULL
+    )
+  `);
+
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS tweets (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      creator_id INTEGER NOT NULL,
+      content TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      likes INTEGER DEFAULT 0,
+      FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+  `);
+  console.log('DB HAS BEEN RESET');
+};
+
+export {
+  createDatabase,
+  insertTweet,
+  getAllTweets,
+  insertNewUser,
+  getUserByUsername,
+  deleteTweet,
+  updateLikes,
+  resetDB,
+};

@@ -1,10 +1,11 @@
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
-import { insertTweet, getAllTweets, deleteTweet, updateLikes } from '../database';
+import { insertTweet, getAllTweets, deleteTweet, updateLikes, resetDB } from '../database';
 import { generateAuthToken, getUserAuthTokenAndData, registerUser } from './loginRegistration';
 import { SQLDatabase } from '../types';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import { unlink } from 'fs/promises';
 
 const createServer = async (db: SQLDatabase) => {
   const app = express();
@@ -149,6 +150,11 @@ const createServer = async (db: SQLDatabase) => {
         res.status(500).json({ error: 'Failed to Login' });
       }
     }
+  });
+
+  app.get('/api/reset', async (req, res) => {
+    await resetDB(db);
+    res.status(200).send('DB reset');
   });
 
   app.get('*', (req, res) => {
