@@ -56,10 +56,6 @@ function Tweet({ id, username, content, timestamp, onDelete, likes, onLike }: Tw
                 </Typography>
               </Box>
 
-              <IconButton aria-label="Edit">
-                <Edit />
-              </IconButton>
-
               <IconButton
                 aria-label="Delete"
                 onClick={onDelete}
