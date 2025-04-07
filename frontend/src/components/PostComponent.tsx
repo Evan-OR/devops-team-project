@@ -55,7 +55,7 @@ const PostComponent: React.FC<Props> = ({ onTweetPosted }) => {
             />
 
             <Box display={'flex'} justifyContent={'flex-end'} m={1}>
-              <Button variant="contained" onClick={handlePost}>
+              <Button variant="contained" onClick={handlePost} color="error">
                 Post
               </Button>
             </Box>
