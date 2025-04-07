@@ -21,11 +21,6 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: Setting ENV vars
-        run: |
-          cd backend
-          npm install
-
       - name: npm install
         run: |
           cd backend
